@@ -69,7 +69,13 @@ if (volt<1)
     digitalWrite(LED, HIGH);
     
   Serial.begin(9600);
-   Serial.println("ENTER AT Commands:");///
+  Serial.println("ENTER AT Commands:");
+  hc06.begin(9600);
+  if (hc06.available())
+    Serial.write(hc06.read());
+  if (Serial.available())
+    hc06.write(Serial.read());
+    ///////////////////
   pinMode(right_fr,OUTPUT);
   pinMode(right_bk,OUTPUT);
   pinMode(left_fr,OUTPUT);
@@ -81,17 +87,12 @@ if (volt<1)
 
   pinMode(LED_BUILTIN,OUTPUT);
   digitalWrite(LED_BUILTIN,LOW);
+  
 }
 
 void loop() {
 
-  hc06.begin(9600);
-  if (hc06.available())
-    Serial.write(hc06.read());
-  if (Serial.available())
-    hc06.write(Serial.read());
   dist = scan();
-
   if ((dist != 0) && ((dist > CONST_DISTANCE+2) || (dist < CONST_DISTANCE-2)))
   {
     digitalWrite(LED_BUILTIN,HIGH);
